@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UangKu - Manajemen keuangan pribadi mahasiswa">
+  <title>UangKu — Kelola Uangmu, Atur Masa Depanmu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">₭</div>
+        <div>
+          <strong>UangKu</strong>
+          <span>Student Finance</span>
+        </div>
+      </div>
+      <nav class="side-nav">
+        <a href="#dashboard" class="nav-link active" data-section="dashboard"><span>⌂</span> Dashboard</a>
+        <a href="#transaksi" class="nav-link" data-section="transaksi"><span>▤</span> Transaksi</a>
+        <a href="#statistik" class="nav-link" data-section="statistik"><span>◔</span> Statistik</a>
+        <a href="#tentang" class="nav-link" data-section="tentang"><span>ⓘ</span> Tentang</a>
+      </nav>
+      <div class="sidebar-tip">
+        <div class="tip-icon">💡</div>
+        <strong>Tips keuangan</strong>
+        <p>Catat transaksi kecil sekalipun. Kebiasaan kecil membantu kamu memahami pola pengeluaran.</p>
+      </div>
+      <button class="reset-btn" id="resetDataBtn">↺ Reset semua data</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Buka menu">☰</button>
+        <div class="topbar-title">
+          <span id="currentDate"></span>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="themeBtn" title="Ubah tema">☼</button>
+          <button class="primary-btn" id="addTransactionBtn">＋ Tambah Transaksi</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section id="dashboard" class="page-section active-section">
+          <div class="hero">
+            <div>
+              <p class="eyebrow">KEUANGAN PRIBADI</p>
+              <h2>Halo, Mahasiswa! 👋</h2>
+              <p>Yuk, kelola keuanganmu dengan lebih teratur.</p>
+            </div>
+            <div class="hero-badge">Kelola uangmu, atur masa depanmu.</div>
+          </div>
+
+          <div class="summary-grid">
+            <article class="summary-card balance-card">
+              <div class="card-icon">◉</div>
+              <div><span>Saldo Saat Ini</span><strong id="balanceValue">Rp0</strong></div>
+              <small id="balanceStatus">Belum ada transaksi</small>
+            </article>
+            <article class="summary-card">
+              <div class="card-icon income-icon">↗</div>
+              <div><span>Total Pemasukan</span><strong id="incomeValue">Rp0</strong></div>
+              <small>Bulan ini</small>
+            </article>
+            <article class="summary-card">
+              <div class="card-icon expense-icon">↘</div>
+              <div><span>Total Pengeluaran</span><strong id="expenseValue">Rp0</strong></div>
+              <small>Bulan ini</small>
+            </article>
+            <article class="summary-card">
+              <div class="card-icon count-icon">#</div>
+              <div><span>Jumlah Transaksi</span><strong id="transactionCount">0</strong></div>
+              <small>Semua transaksi</small>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel">
+              <div class="panel-heading">
+                <div><h3>Arus Keuangan</h3><p>Perbandingan pemasukan dan pengeluaran bulan ini</p></div>
+                <select id="flowPeriod" class="select-input"><option value="month">Bulan ini</option><option value="all">Semua</option></select>
+              </div>
+              <div class="bar-chart" id="flowChart"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading"><div><h3>Target Pengeluaran</h3><p>Batas pengeluaran bulananmu</p></div><button class="text-btn" id="editTargetBtn">Atur</button></div>
+              <div class="target-amounts"><strong id="targetSpent">Rp0</strong><span> / <span id="targetLimit">Rp1.500.000</span></span></div>
+              <div class="progress-track"><div class="progress-fill" id="targetProgress"></div></div>
+              <div class="target-meta"><span id="targetPercent">0%</span><span id="targetMessage">Aman, tetap konsisten!</span></div>
+            </article>
+          </div>
+
+          <div class="dashboard-grid lower-grid">
+            <article class="panel">
+              <div class="panel-heading"><div><h3>Transaksi Terbaru</h3><p>Aktivitas keuangan terbaru</p></div><div><button class="text-btn" id="exportCsvBtn">↓ Export CSV</button> <button class="text-btn" data-go="transaksi">Lihat semua →</button></div></div>
+              <div id="recentTransactions" class="transaction-list"></div>
+            </article>
+            <article class="panel insight-panel">
+              <div class="panel-heading"><div><h3>Insight Keuangan 💡</h3><p>Analisis otomatis dari datamu</p></div></div>
+              <div id="insightContent" class="insight-content"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="transaksi" class="page-section">
+          <div class="section-header"><div><p class="eyebrow">CATATAN KEUANGAN</p><h2>Riwayat Transaksi</h2><p>Kelola seluruh pemasukan dan pengeluaranmu.</p></div><button class="primary-btn" id="addTransactionBtn2">＋ Tambah Transaksi</button></div>
+          <div class="panel filters-panel">
+            <div class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Cari keterangan atau kategori..."></div>
+            <select id="typeFilter" class="select-input"><option value="all">Semua jenis</option><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option></select>
+            <select id="categoryFilter" class="select-input"><option value="all">Semua kategori</option></select>
+            <select id="periodFilter" class="select-input"><option value="all">Semua periode</option><option value="today">Hari ini</option><option value="week">Minggu ini</option><option value="month">Bulan ini</option></select>
+            <select id="sortFilter" class="select-input"><option value="newest">Terbaru</option><option value="oldest">Terlama</option><option value="highest">Nominal terbesar</option><option value="lowest">Nominal terkecil</option></select>
+          </div>
+          <div class="panel table-panel">
+            <div class="table-wrap">
+              <table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Jenis</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="transactionTableBody"></tbody></table>
+            </div>
+            <div id="transactionEmpty" class="empty-state hidden"><div class="empty-icon">₭</div><h3>Belum ada transaksi</h3><p>Yuk, mulai catat transaksi pertamamu.</p><button class="primary-btn" id="emptyAddBtn">＋ Tambah Transaksi</button></div>
+          </div>
+        </section>
+
+        <section id="statistik" class="page-section">
+          <div class="section-header"><div><p class="eyebrow">ANALISIS</p><h2>Statistik Keuangan</h2><p>Lihat pola pemasukan dan pengeluaranmu.</p></div>
+            <select id="statsPeriod" class="select-input"><option value="month">Bulan ini</option><option value="all">Semua transaksi</option></select>
+          </div>
+          <div class="stats-grid">
+            <article class="panel stat-card"><div class="panel-heading"><div><h3>Pemasukan vs Pengeluaran</h3><p>Total berdasarkan periode</p></div></div><div class="big-chart" id="statsFlowChart"></div></article>
+            <article class="panel stat-card"><div class="panel-heading"><div><h3>Pengeluaran per Kategori</h3><p>Kategori dengan pengeluaran terbesar</p></div></div><div id="categoryChart" class="category-chart"></div></article>
+          </div>
+        </section>
+
+        <section id="tentang" class="page-section">
+          <div class="section-header"><div><p class="eyebrow">TENTANG APLIKASI</p><h2>Tentang UangKu</h2><p>Aplikasi sederhana untuk membantu mahasiswa lebih sadar terhadap keuangannya.</p></div></div>
+          <div class="about-grid">
+            <article class="panel about-card"><div class="about-logo">₭</div><h3>UangKu</h3><p>“Kelola Uangmu, Atur Masa Depanmu.”</p><p>UangKu dirancang sebagai proyek pembelajaran untuk membantu mahasiswa mencatat pemasukan, pengeluaran, membuat target, dan membaca kondisi keuangan pribadi secara sederhana.</p></article>
+            <article class="panel"><h3>Fitur utama</h3><ul class="feature-list"><li>✓ Tambah, edit, dan hapus transaksi</li><li>✓ Dashboard saldo real-time</li><li>✓ Pencarian dan filter transaksi</li><li>✓ Statistik dan grafik keuangan</li><li>✓ Target pengeluaran bulanan</li><li>✓ Insight otomatis</li><li>✓ Penyimpanan LocalStorage</li><li>✓ Export transaksi ke CSV</li><li>✓ Responsive untuk desktop dan mobile</li></ul></article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="transactionModal">
+    <div class="modal">
+      <div class="modal-header"><div><p class="eyebrow">TRANSAKSI</p><h3 id="modalTitle">Tambah Transaksi</h3></div><button class="close-btn" id="closeModalBtn">×</button></div>
+      <form id="transactionForm">
+        <input type="hidden" id="transactionId">
+        <label>Jenis Transaksi
+          <div class="type-toggle"><label><input type="radio" name="type" value="income" checked><span>↗ Pemasukan</span></label><label><input type="radio" name="type" value="expense"><span>↘ Pengeluaran</span></label></div>
+        </label>
+        <div class="form-grid">
+          <label>Nominal (Rupiah)<input id="amountInput" type="number" min="1" step="1000" placeholder="Contoh: 50000" required></label>
+          <label>Tanggal<input id="dateInput" type="date" required></label>
+        </div>
+        <label>Kategori<select id="categoryInput" required></select></label>
+        <label>Keterangan<input id="noteInput" type="text" maxlength="80" placeholder="Contoh: Beli makan siang" required></label>
+        <div class="modal-actions"><button type="button" class="secondary-btn" id="cancelModalBtn">Batal</button><button type="submit" class="primary-btn">Simpan Transaksi</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="targetModal">
+    <div class="modal small-modal">
+      <div class="modal-header"><div><p class="eyebrow">PENGATURAN</p><h3>Target Pengeluaran</h3></div><button class="close-btn" id="closeTargetBtn">×</button></div>
+      <form id="targetForm"><label>Batas pengeluaran bulanan<input id="targetInput" type="number" min="0" step="10000" required></label><div class="modal-actions"><button type="button" class="secondary-btn" id="cancelTargetBtn">Batal</button><button type="submit" class="primary-btn">Simpan Target</button></div></form>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"><span id="toastIcon">✓</span><span id="toastMessage">Berhasil!</span></div>
+  <script src="script.js"></script>
+</body>
+</html>
